@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include "g_local.h"
+//#include "g_cmds.c"
 
 
 /*
@@ -387,7 +388,60 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
 		bolt->touch (bolt, tr.ent, NULL, NULL);
 	}
-}	
+
+	/*if(self -> experiencePoints > 500)//bl233[4]
+	{
+		gi.cprintf (self, PRINT_HIGH, "press 'j' for the charge path \n press 'k' for the damage path \n press 'l' for the speed route");
+		if(FirstPath == 0)
+		{
+			speed *= 50;
+		}
+		if(SecondPath == 0)
+		{
+			damage += 50;
+		}
+		if(ThirdPath == 0)
+		{	
+			edict_t	*ent;
+			float	points;
+			vec3_t	v;
+			float	dist;
+
+			if (self->s.frame == 0)
+			{
+				// the BFG effect
+				ent = NULL;
+				while ((ent = findradius(ent, self->s.origin, self->dmg_radius)) != NULL)
+				{
+					if (!ent->takedamage)
+						continue;
+					if (ent == self->owner)
+						continue;
+					if (!CanDamage (ent, self))
+						continue;
+					if (!CanDamage (ent, self->owner))
+						continue;
+
+					VectorAdd (ent->mins, ent->maxs, v);
+					VectorMA (ent->s.origin, 0.5, v, v);
+					VectorSubtract (self->s.origin, v, v);
+					dist = VectorLength(v);
+					points = self->radius_dmg * (1.0 - sqrt(dist/self->dmg_radius));
+					if (ent == self->owner)
+						points = points * 0.5;
+
+					gi.WriteByte (svc_temp_entity);
+					gi.WriteByte (TE_BFG_EXPLOSION);
+					gi.WritePosition (ent->s.origin);
+					gi.multicast (ent->s.origin, MULTICAST_PHS);
+					T_Damage (ent, self, self->owner, self->velocity, ent->s.origin, vec3_origin, (int)points, 0, DAMAGE_ENERGY, MOD_BFG_EFFECT);
+				}
+			}
+		}
+	}*/
+
+}
+
 
 
 /*

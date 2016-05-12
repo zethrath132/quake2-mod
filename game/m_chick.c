@@ -385,6 +385,8 @@ void chick_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 		self->monsterinfo.currentmove = &chick_move_death2;
 		gi.sound (self, CHAN_VOICE, sound_death2, 1, ATTN_NORM, 0);
 	}
+	inflictor -> client -> pers.experiencePoints += 500;//bl233[5] - adds experience upon death
+	gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 
 

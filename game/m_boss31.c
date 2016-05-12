@@ -594,6 +594,8 @@ void jorg_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 	self->s.sound = 0;
 	self->count = 0;
 	self->monsterinfo.currentmove = &jorg_move_death;
+	inflictor -> client -> pers.experiencePoints += 2000;//bl233[5] - adds experience upon death
+	gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 
 qboolean Jorg_CheckAttack (edict_t *self)

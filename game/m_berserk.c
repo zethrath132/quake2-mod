@@ -341,7 +341,9 @@ void berserk_dead (edict_t *self)
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
 	gi.linkentity (self);
+	
 }
+
 
 
 mframe_t berserk_frames_death1 [] =
@@ -395,7 +397,9 @@ void berserk_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
 	gi.sound (self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
 	self->deadflag = DEAD_DEAD;
@@ -405,6 +409,8 @@ void berserk_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 		self->monsterinfo.currentmove = &berserk_move_death1;
 	else
 		self->monsterinfo.currentmove = &berserk_move_death2;
+	inflictor -> client -> pers.experiencePoints += 500;//bl233[5] - adds experience upon death
+	gi.bprintf(PRINT_HIGH,"%i exp gained", inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 
 

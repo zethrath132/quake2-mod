@@ -899,6 +899,24 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+void FirstPath (edict_t *ent)//bl233[9]
+{
+	ent -> client -> upgrade_status = FIRST_PATH;
+	return;
+}
+
+void *SecondPath (edict_t *ent)
+{
+	ent -> client -> upgrade_status = SECOND_PATH;
+	return;
+}
+
+void *ThirdPath (edict_t *ent)
+{
+	ent -> client -> upgrade_status = THIRD_PATH;
+	return;
+}
+
 
 /*
 =================
@@ -987,6 +1005,12 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
+	else if (Q_stricmp(cmd, "firstpath") == 0)//bl233[8]
+		FirstPath(ent);
+	else if (Q_stricmp(cmd, "secondpath") == 0)
+		SecondPath(ent);
+	else if (Q_stricmp(cmd, "thirdpath") == 0)
+		ThirdPath(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

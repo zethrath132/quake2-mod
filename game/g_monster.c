@@ -90,6 +90,7 @@ void monster_fire_railgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 
 void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int kick, float damage_radius, int flashtype)
 {
+	qboolean test = false;
 	fire_bfg (self, start, aimdir, damage, speed, damage_radius);
 
 	gi.WriteByte (svc_muzzleflash2);
@@ -512,7 +513,18 @@ void monster_death_use (edict_t *self)
 {
 	self->flags &= ~(FL_FLY|FL_SWIM);
 	self->monsterinfo.aiflags &= AI_GOOD_GUY;
+	if(self -> enemy -> client != NULL)//bl233[14] - if the enemy of the destroyed monster has a non NULL client date, run the statements
+	{
+		//self->mass refers to the monster's own mass.
+		self->enemy->client->pers.experiencePoints += self->mass*5; //bl233[13] - makes all enemies give exp on death except for flyers
+		gi.bprintf(PRINT_HIGH,"%i exp gained \n", self -> enemy -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
+		if(self -> enemy -> client -> pers.experiencePoints >= 500)
+		{
+			self -> enemy -> client -> pers.characterLevel = 2;
+			gi.bprintf(PRINT_HIGH, "You have leveled up! \n Press 'f' to go down the speed path \n Press 'm' to go down the damage path \n Press 'n' to go down the BFG path");
+		}
 
+	}
 	if (self->item)
 	{
 		Drop_Item (self, self->item);

@@ -28,6 +28,7 @@ static byte		is_silenced;
 
 
 void weapon_grenade_fire (edict_t *ent, qboolean held);
+void weapon_bfg_fire (edict_t *ent);
 
 
 static void P_ProjectSource (gclient_t *client, vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
@@ -297,6 +298,7 @@ void Think_Weapon (edict_t *ent)
 		else
 			is_silenced = 0;
 		ent->client->pers.weapon->weaponthink (ent);
+
 	}
 }
 
@@ -815,6 +817,7 @@ BLASTER / HYPERBLASTER
 
 void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
 {
+	int timeElapsed;
 	vec3_t	forward, right;
 	vec3_t	start;
 	vec3_t	offset;
@@ -829,7 +832,31 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
+	if(ent -> client -> pers.characterLevel == 1 && ent -> client -> upgrade_status == FIRST_PATH)
+	{
+		timeElapsed = level.time + .5;
+		fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
+		ent -> client -> pers.experiencePoints - 500;
+		if(ent -> client -> pers.characterLevel < 0)
+		{
+			ent -> client -> pers.experiencePoints = 0;
+		}
+	}
+	if(ent -> client -> pers.characterLevel == 1 && ent -> client -> upgrade_status == SECOND_PATH)
+	{
+		damage*=2;
+		ent -> client -> pers.experiencePoints - 500;
+		if(ent -> client -> pers.characterLevel < 0)
+		{
+			ent -> client -> pers.experiencePoints = 0;
+		}
+	}
+
 	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+	
+	if(ent -> client -> pers.characterLevel == 1 && ent -> client -> upgrade_status == THIRD_PATH)
+	{
+		
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
@@ -841,6 +868,42 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
+	
+	/*if(ent -> client -> pers.experiencePoints >= 500)//bl233[4]
+	{
+		gi.cprintf (ent, PRINT_HIGH, "press 'F' for the multishot path \n press 'M' for the damage path \n press 'N' for the speed route");
+		if(ent -> client -> upgrade_status == FIRST_PATH)
+		{
+			int timeElapsed = level.time + 1;
+			if(timeElapsed > level.time)
+			{
+				fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+			}
+			ent -> client -> pers.experiencePoints - 500;
+			if(ent -> client -> pers.experiencePoints < 0)
+			{
+				ent -> client -> pers.experiencePoints = 0;
+			}
+		}
+		if(ent ->owner -> client ->upgrade_status == SECOND_PATH)
+		{
+			damage *= 3;
+			ent -> client -> pers.experiencePoints - 500;
+			if(ent -> client -> pers.experiencePoints < 0)
+			{
+				ent -> client -> pers.experiencePoints = 0;
+			}
+		}
+		if(ent ->owner ->client ->upgrade_status == THIRD_PATH)
+		{	
+			fire_bfg (ent, start, forward, damage, 400, 200);
+		}
+		ent -> client -> pers.experiencePoints - 500;
+		if(ent -> client -> pers.experiencePoints < 0)
+		{
+			ent -> client -> pers.experiencePoints = 0;
+		}*/
+	}
 }
 
 

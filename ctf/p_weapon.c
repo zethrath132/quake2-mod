@@ -581,6 +581,7 @@ GRENADE
 #define GRENADE_MINSPEED	400
 #define GRENADE_MAXSPEED	800
 
+//bl233[1] - making a change here
 void weapon_grenade_fire (edict_t *ent, qboolean held)
 {
 	vec3_t	offset;

@@ -1253,6 +1253,7 @@ void PutClientInServer (edict_t *ent)
 	// force the current weapon up
 	client->newweapon = client->pers.weapon;
 	ChangeWeapon (ent);
+	client ->upgrade_status = NO_UPGRADE;
 }
 
 /*

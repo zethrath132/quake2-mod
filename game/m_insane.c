@@ -613,6 +613,8 @@ void insane_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 		else
 			self->monsterinfo.currentmove = &insane_move_stand_death;
 	}
+	attacker -> client -> pers.experiencePoints += 500;//bl233[5] - adds experience upon death
+	gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 
 

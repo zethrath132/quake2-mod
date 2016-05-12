@@ -1,0 +1,108 @@
+﻿Build started 5/11/2016 8:24:25 PM.
+     1>Project "C:\Users\zethr\Desktop\quake2-tutorials\game\game.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating ".\release\game.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Z7 /nologo /W4 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\release\\" /Fd".\release\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt g_monster.c m_flipper.c m_flyer.c m_infantry.c m_insane.c m_soldier.c
+         g_monster.c
+     1>g_monster.c(91): warning C4100: 'kick' : unreferenced formal parameter
+     1>g_monster.c(93): warning C4189: 'test' : local variable is initialized but not referenced
+     1>g_monster.c(441): warning C4100: 'other' : unreferenced formal parameter
+     1>g_monster.c(484): warning C4100: 'other' : unreferenced formal parameter
+         m_flipper.c
+     1>m_flipper.c(223): warning C4100: 'damage' : unreferenced formal parameter
+     1>m_flipper.c(223): warning C4100: 'kick' : unreferenced formal parameter
+     1>m_flipper.c(223): warning C4100: 'other' : unreferenced formal parameter
+     1>m_flipper.c(327): warning C4100: 'other' : unreferenced formal parameter
+     1>m_flipper.c(332): warning C4100: 'point' : unreferenced formal parameter
+         m_flyer.c
+     1>m_flyer.c(52): warning C4100: 'other' : unreferenced formal parameter
+     1>m_flyer.c(531): warning C4100: 'damage' : unreferenced formal parameter
+     1>m_flyer.c(531): warning C4100: 'kick' : unreferenced formal parameter
+     1>m_flyer.c(531): warning C4100: 'other' : unreferenced formal parameter
+     1>m_flyer.c(564): warning C4100: 'point' : unreferenced formal parameter
+     1>m_flyer.c(564): warning C4100: 'damage' : unreferenced formal parameter
+         m_infantry.c
+     1>m_infantry.c(215): warning C4100: 'damage' : unreferenced formal parameter
+     1>m_infantry.c(215): warning C4100: 'kick' : unreferenced formal parameter
+     1>m_infantry.c(215): warning C4100: 'other' : unreferenced formal parameter
+     1>m_infantry.c(299): warning C4100: 'other' : unreferenced formal parameter
+     1>m_infantry.c(386): warning C4100: 'point' : unreferenced formal parameter
+     1>m_infantry.c(386): warning C4100: 'attacker' : unreferenced formal parameter
+     1>m_infantry.c(470): warning C4100: 'eta' : unreferenced formal parameter
+         m_insane.c
+     1>m_insane.c(477): warning C4100: 'damage' : unreferenced formal parameter
+     1>m_insane.c(477): warning C4100: 'kick' : unreferenced formal parameter
+     1>m_insane.c(477): warning C4100: 'other' : unreferenced formal parameter
+     1>m_insane.c(581): warning C4100: 'point' : unreferenced formal parameter
+         m_soldier.c
+     1>m_soldier.c(409): warning C4100: 'damage' : unreferenced formal parameter
+     1>m_soldier.c(409): warning C4100: 'kick' : unreferenced formal parameter
+     1>m_soldier.c(409): warning C4100: 'other' : unreferenced formal parameter
+     1>m_soldier.c(792): warning C4100: 'other' : unreferenced formal parameter
+     1>m_soldier.c(1144): warning C4100: 'attacker' : unreferenced formal parameter
+     1>m_soldier.c(1144): warning C4100: 'inflictor' : unreferenced formal parameter
+         Generating Code...
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\zethr\Desktop\quake2-tutorials\game\.\..\release\game.dll) does not match the Linker's OutputFile property value (C:\Users\zethr\Desktop\quake2-tutorials\release\gamex86.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(992,5): warning MSB8012: TargetName(game) does not match the Linker's OutputFile property value (gamex86). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\release\gamex86.dll" /INCREMENTAL:NO /NOLOGO winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /DEF:".\game.def" /MANIFEST /ManifestFile:".\release\game.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"C:\Users\zethr\Desktop\quake2-tutorials\release\game.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /BASE:"0x20000000" /DYNAMICBASE /NXCOMPAT /IMPLIB:".\..\release\gamex86.lib" /MACHINE:X86 /DLL .\release\g_ai.obj
+         .\release\g_chase.obj
+         .\release\g_cmds.obj
+         .\release\g_combat.obj
+         .\release\g_func.obj
+         .\release\g_items.obj
+         .\release\g_main.obj
+         .\release\g_misc.obj
+         .\release\g_monster.obj
+         .\release\g_phys.obj
+         .\release\g_save.obj
+         .\release\g_spawn.obj
+         .\release\g_svcmds.obj
+         .\release\g_target.obj
+         .\release\g_trigger.obj
+         .\release\g_turret.obj
+         .\release\g_utils.obj
+         .\release\g_weapon.obj
+         .\release\m_actor.obj
+         .\release\m_berserk.obj
+         .\release\m_boss2.obj
+         .\release\m_boss3.obj
+         .\release\m_boss31.obj
+         .\release\m_boss32.obj
+         .\release\m_brain.obj
+         .\release\m_chick.obj
+         .\release\m_flash.obj
+         .\release\m_flipper.obj
+         .\release\m_float.obj
+         .\release\m_flyer.obj
+         .\release\m_gladiator.obj
+         .\release\m_gunner.obj
+         .\release\m_hover.obj
+         .\release\m_infantry.obj
+         .\release\m_insane.obj
+         .\release\m_medic.obj
+         .\release\m_move.obj
+         .\release\m_mutant.obj
+         .\release\m_parasite.obj
+         .\release\m_soldier.obj
+         .\release\m_supertank.obj
+         .\release\m_tank.obj
+         .\release\p_client.obj
+         .\release\p_hud.obj
+         .\release\p_trail.obj
+         .\release\p_view.obj
+         .\release\p_weapon.obj
+         .\release\q_shared.obj
+            Creating library .\..\release\gamex86.lib and object .\..\release\gamex86.exp
+         game.vcxproj -> C:\Users\zethr\Desktop\quake2-tutorials\game\.\..\release\game.dll
+       Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"..\release\gamex86.dll;#2" /manifest .\release\game.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file ".\release\game.unsuccessfulbuild".
+         Touching ".\release\game.lastbuildstate".
+     1>Done Building Project "C:\Users\zethr\Desktop\quake2-tutorials\game\game.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.52

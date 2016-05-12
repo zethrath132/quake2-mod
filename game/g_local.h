@@ -181,6 +181,10 @@ typedef enum
 #define PNOISE_WEAPON			1
 #define PNOISE_IMPACT			2
 
+#define NO_UPGRADE				0 //bl233[12]
+#define FIRST_PATH				1
+#define SECOND_PATH				2
+#define THIRD_PATH				3
 
 // edict->movetype values
 typedef enum
@@ -862,6 +866,8 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
+	int			experiencePoints;	//bl233[7] - makes exp a persistant datacde 
+	int			characterLevel;		//creates a level that persists through the maps
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -959,6 +965,7 @@ struct gclient_s
 
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
+	int			upgrade_status;		//upgrade status
 };
 
 
@@ -1109,5 +1116,6 @@ struct edict_s
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
+	//int				experiencePoints; //bl233[3]
 };
 

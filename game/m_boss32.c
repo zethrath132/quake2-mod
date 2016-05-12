@@ -705,7 +705,8 @@ void makron_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	makron_torso (tempent);
 
 	self->monsterinfo.currentmove = &makron_move_death2;
-	
+	inflictor -> client -> pers.experiencePoints += 3000;//bl233[5] - adds experience upon death
+	gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 
 qboolean Makron_CheckAttack (edict_t *self)
