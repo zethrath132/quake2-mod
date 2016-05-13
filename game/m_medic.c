@@ -440,8 +440,8 @@ void medic_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	self->takedamage = DAMAGE_YES;
 
 	self->monsterinfo.currentmove = &medic_move_death;
-	inflictor -> client -> pers.experiencePoints += 500;//bl233[5] - adds experience upon death
-	gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
+	//inflictor -> client -> pers.experiencePoints += 500;//bl233[5] - adds experience upon death
+	//gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 
 

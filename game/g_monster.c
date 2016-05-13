@@ -516,14 +516,59 @@ void monster_death_use (edict_t *self)
 	if(self -> enemy -> client != NULL)//bl233[14] - if the enemy of the destroyed monster has a non NULL client date, run the statements
 	{
 		//self->mass refers to the monster's own mass.
-		self->enemy->client->pers.experiencePoints += self->mass*5; //bl233[13] - makes all enemies give exp on death except for flyers
+		self->enemy->client->pers.experiencePoints += self->mass/25; //bl233[13] - makes all enemies give exp on death except for flyers
 		gi.bprintf(PRINT_HIGH,"%i exp gained \n", self -> enemy -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
-		if(self -> enemy -> client -> pers.experiencePoints >= 500)
+		if(self -> enemy -> client -> pers.experiencePoints >= 10)
+		{
+			self -> enemy -> client -> pers.characterLevel = 1;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 1 && self -> enemy -> client -> pers.experiencePoints >= 20)
 		{
 			self -> enemy -> client -> pers.characterLevel = 2;
-			gi.bprintf(PRINT_HIGH, "You have leveled up! \n Press 'f' to go down the speed path \n Press 'm' to go down the damage path \n Press 'n' to go down the BFG path");
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
 		}
-
+		if(self -> enemy -> client -> pers.characterLevel == 2 && self -> enemy -> client -> pers.experiencePoints >= 30)
+		{
+			self -> enemy -> client -> pers.characterLevel = 3;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 3 && self -> enemy -> client -> pers.experiencePoints >= 40)
+		{
+			gi.bprintf(PRINT_HIGH, "Did I hit 4?");
+			self -> enemy -> client -> pers.characterLevel == 4;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 4 && self -> enemy -> client -> pers.experiencePoints >= 50)
+		{
+			self -> enemy -> client -> pers.characterLevel = 5;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 5 && self -> enemy -> client -> pers.experiencePoints >= 60)
+		{
+			self -> enemy -> client -> pers.characterLevel = 6;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 6 && self -> enemy -> client -> pers.experiencePoints >= 70)
+		{
+			self -> enemy -> client -> pers.characterLevel = 7;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 7 && self -> enemy -> client -> pers.experiencePoints >= 80)
+		{
+			self -> enemy -> client -> pers.characterLevel = 8;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 8 && self -> enemy -> client -> pers.experiencePoints >= 90)
+		{
+			self -> enemy -> client -> pers.characterLevel = 9;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 9 && self -> enemy -> client -> pers.experiencePoints >= 100)
+		{
+			self -> enemy -> client -> pers.characterLevel = 10;
+			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
 	}
 	if (self->item)
 	{

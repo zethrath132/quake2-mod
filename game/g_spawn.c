@@ -654,6 +654,25 @@ char *single_statusbar =
 "xv	50 "
 "pic 0 "
 
+// experience
+//configstring syntax - spaces are deliminters; they are needed after every chunk of information
+//xv screen centered offset to the right by 0.  Positive numbers will move right, negative move left in this case
+"xv 0 "
+//yb sets the cursor to the bottom
+//in this case, it will place the cursor 48 pixels above the bottom of the screen
+//in this case, negative will push the cursor up while positive will drag it down
+"yb -72 "
+//first chunk of information is the type of information it is.  If you want it to be a special case, you need to modify the exe. EX: anum, hnum
+//second chunk of information is the max digits that can be shown.  The maximum is limited to 3 digits for num.  In this case, the highest number that can be displayed is 999
+//third chunk of information is the index of the ps.stats array that you're looking at
+"num 3 18 "
+
+//shows your current level
+"xv 36 "
+"yb -72 "
+"num 3 19 "
+
+
 // ammo
 "if 2 "
 "	xv	100 "

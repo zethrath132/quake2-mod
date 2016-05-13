@@ -899,23 +899,75 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+//Gets the weapon currently equipped
+void GetWeaponIndex(edict_t *ent, int *index)//BL233[19]
+{
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_blaster"))
+		*index = BLASTER;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_shotgun"))
+		*index = SHOTGUN;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_supershotgun"))
+		*index = SUPERSHOTGUN;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_machinegun"))
+		*index = MACHINEGUN;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_chaingun"))
+		*index = CHAINGUN;
+	if (!strcmp(ent->client->pers.weapon->classname, "ammo_grenades"))
+		*index = GRENADE;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_grenadelauncher"))
+		*index = GRENADELAUNCHER;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_rocketlauncher"))
+		*index = ROCKETLAUNCHER;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_hyperblaster"))
+		*index = HYPERBLASTER;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_railgun"))
+		*index = RAILGUN;
+	if (!strcmp(ent->client->pers.weapon->classname, "weapon_bfg"))
+		*index = BFG;
+}
+
 void FirstPath (edict_t *ent)//bl233[9]
 {
-	ent -> client -> upgrade_status = FIRST_PATH;
-	return;
+	int index;
+
+	GetWeaponIndex( ent, &index );
+
+	//if the stuff in the parameters is equal to zero, the code will not resolve
+	if(!(ent -> client -> pers.upgrade_status[index]))
+	{
+		ent -> client -> pers.upgrade_status[index] = FIRST_PATH;
+	}
+	gi.centerprintf (ent,"You have now locked in Path 1\nfor this weapon");
 }
 
-void *SecondPath (edict_t *ent)
+void SecondPath (edict_t *ent)
 {
-	ent -> client -> upgrade_status = SECOND_PATH;
-	return;
+	int index;
+
+	GetWeaponIndex( ent, &index );
+
+	if(!(ent -> client -> pers.upgrade_status[index]))
+	{
+		ent -> client -> pers.upgrade_status[index] = SECOND_PATH;
+	}
+	gi.centerprintf (ent,"You have now locked in Path\nfor this weapon");
 }
 
-void *ThirdPath (edict_t *ent)
+void ThirdPath (edict_t *ent)
 {
-	ent -> client -> upgrade_status = THIRD_PATH;
-	return;
+	int index;
+
+	GetWeaponIndex( ent, &index );
+
+	//gi.centerprintf(ent,"hello %i\n", index);
+	if(!(ent -> client -> pers.upgrade_status[index]))
+	{
+		//gi.centerprintf(ent,"derp\n");
+		ent -> client -> pers.upgrade_status[index] = THIRD_PATH;
+	}
+	gi.centerprintf (ent,"You have now locked in Path 3\nfor this weapon");
 }
+
 
 
 /*
@@ -1011,6 +1063,8 @@ void ClientCommand (edict_t *ent)
 		SecondPath(ent);
 	else if (Q_stricmp(cmd, "thirdpath") == 0)
 		ThirdPath(ent);
+	else if (Q_stricmp(cmd, "showUpgrades") == 0)
+		toggle_upgrades_menu(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

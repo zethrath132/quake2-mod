@@ -1008,6 +1008,8 @@ typedef enum
 #define	STAT_FLASHES			15		// cleared each frame, 1 = health, 2 = armor
 #define STAT_CHASE				16
 #define STAT_SPECTATOR			17
+#define STAT_EXPERIENCE			18		//bl233[21] - current experience total
+#define CURRENT_LEVEL			19		//bl233[20] - current level
 
 #define	MAX_STATS				32
 
@@ -1198,3 +1200,25 @@ typedef struct
 extern int vidref_val;
 // PGM
 // ==================
+
+//bl233[17] - defined all the variables within the array
+#define BLASTER			0//compiler will replace every 'BLASTER' with the num 0
+#define	SHOTGUN			1
+#define SUPERSHOTGUN	2
+#define	MACHINEGUN		3
+#define CHAINGUN		4
+#define HYPERBLASTER	5
+#define ROCKETLAUNCHER	6
+#define	GRENADELAUNCHER 7
+#define	GRENADE			8
+#define RAILGUN			9
+#define BFG				10
+
+//notes:  enum with a curly brace automatically sets a value to each variable that is
+//not initialized within the enum braces.  Numbers are sequential and the ones that follow
+//the assigned variables will have a value +1 to the previous one.
+/*enum {
+	derp  = 3,
+	derpy =7,
+	flarg
+};*/

@@ -1,4 +1,4 @@
-﻿Build started 5/11/2016 8:24:26 PM.
+﻿Build started 5/13/2016 5:40:28 PM.
      1>Project "C:\Users\zethr\Desktop\quake2-tutorials\quake2.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating ".\release\quake2.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -16,4 +16,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.22
+Time Elapsed 00:00:00.12

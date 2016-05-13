@@ -605,6 +605,7 @@ extern	gitem_t	itemlist[];
 //
 void Cmd_Help_f (edict_t *ent);
 void Cmd_Score_f (edict_t *ent);
+void toggle_upgrades_menu (edict_t *ent);
 
 //
 // g_items.c
@@ -672,6 +673,8 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 #define DEFAULT_BULLET_VSPREAD	500
 #define DEFAULT_SHOTGUN_HSPREAD	1000
 #define DEFAULT_SHOTGUN_VSPREAD	500
+#define BENS_SHOTGUN_HSPREAD_MODIFIER 3000	//bl233[21] - attempting to create my own custom horizontal spread for a path
+#define BENS_SHOTGUN_VSPREAD_MODIFIER 1500	//bl233[22] - same as above except for vertical spread
 #define DEFAULT_DEATHMATCH_SHOTGUN_COUNT	12
 #define DEFAULT_SHOTGUN_COUNT	12
 #define DEFAULT_SSHOTGUN_COUNT	20
@@ -868,6 +871,8 @@ typedef struct
 	qboolean	spectator;			// client is a spectator
 	int			experiencePoints;	//bl233[7] - makes exp a persistant datacde 
 	int			characterLevel;		//creates a level that persists through the maps
+	int			upgrade_status[13];	//upgrade status array set to 13
+	//void GetWeaponIndex(edict_t *ent, int *index);
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -965,7 +970,7 @@ struct gclient_s
 
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
-	int			upgrade_status;		//upgrade status
+	qboolean	showUpgrades;		//bl233[15] - added in a boolean for showing upgrades
 };
 
 

@@ -291,6 +291,35 @@ void Cmd_Score_f (edict_t *ent)
 	DeathmatchScoreboard (ent);
 }
 
+void UpgradeBckgrnd (edict_t *ent)
+{
+	//how many characters are in the confix string that are passed to the server
+	char	string[1024];
+
+	// send the layout
+	Com_sprintf (string, sizeof(string),
+		//%f is a float, %i is an int, %s is a string
+		"xv 32 yv 8 picn inventory "		// background
+		//will not receive \n.  The below the example shows a hardcoded string
+		"xv 0 yv 24 cstring2 \"Double Shot\" "		// level name
+		//below example is a format string passed through the %s in the code that
+		//correlates with the variables below  (1 to 1)
+		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
+		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
+		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
+		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ", 
+
+		game.helpmessage1,
+		game.helpmessage2,
+		level.killed_monsters, level.total_monsters, 
+		level.found_goals, level.total_goals,
+		level.found_secrets, level.total_secrets);
+
+	gi.WriteByte (svc_layout);
+	gi.WriteString (string);
+	gi.unicast (ent, true);
+}
+
 
 /*
 ==================
@@ -366,6 +395,24 @@ void Cmd_Help_f (edict_t *ent)
 	HelpComputer (ent);
 }
 
+//toggles upgrade menu bl233[16]
+
+void toggle_upgrades_menu (edict_t *ent)
+{
+	ent->client->showinventory = false;
+	ent->client->showscores = false;
+	ent->client->showhelp = false;
+
+	if (ent->client->showUpgrades)
+	{
+		ent->client->showUpgrades = false;
+		return;
+	}
+
+	ent->client->showUpgrades = true;
+	UpgradeBckgrnd (ent);
+}
+
 
 //=======================================================================
 
@@ -385,7 +432,16 @@ void G_SetStats (edict_t *ent)
 	//
 	ent->client->ps.stats[STAT_HEALTH_ICON] = level.pic_health;
 	ent->client->ps.stats[STAT_HEALTH] = ent->health;
-	
+
+	//
+	//experience points
+	//
+	ent->client->ps.stats[STAT_EXPERIENCE] = ent->client->pers.experiencePoints;//stat index experience
+
+	//
+	//levels
+	//
+	ent->client->ps.stats[CURRENT_LEVEL] = ent->client->pers.characterLevel;//stat index character level
 
 	//
 	// ammo
@@ -498,7 +554,7 @@ void G_SetStats (edict_t *ent)
 	}
 	else
 	{
-		if (ent->client->showscores || ent->client->showhelp)
+		if (ent->client->showscores || ent->client->showhelp || ent -> client -> showUpgrades)
 			ent->client->ps.stats[STAT_LAYOUTS] |= 1;
 		if (ent->client->showinventory && ent->client->pers.health > 0)
 			ent->client->ps.stats[STAT_LAYOUTS] |= 2;

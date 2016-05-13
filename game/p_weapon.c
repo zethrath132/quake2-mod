@@ -202,7 +202,7 @@ void ChangeWeapon (edict_t *ent)
 		ent->client->ammo_index = ITEM_INDEX(FindItem(ent->client->pers.weapon->ammo));
 	else
 		ent->client->ammo_index = 0;
-
+	
 	if (!ent->client->pers.weapon)
 	{	// dead
 		ent->client->ps.gunindex = 0;
@@ -832,31 +832,35 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	if(ent -> client -> pers.characterLevel == 1 && ent -> client -> upgrade_status == FIRST_PATH)
-	{
-		timeElapsed = level.time + .5;
-		fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
-		ent -> client -> pers.experiencePoints - 500;
-		if(ent -> client -> pers.characterLevel < 0)
-		{
-			ent -> client -> pers.experiencePoints = 0;
-		}
-	}
-	if(ent -> client -> pers.characterLevel == 1 && ent -> client -> upgrade_status == SECOND_PATH)
-	{
-		damage*=2;
-		ent -> client -> pers.experiencePoints - 500;
-		if(ent -> client -> pers.characterLevel < 0)
-		{
-			ent -> client -> pers.experiencePoints = 0;
-		}
-	}
+	//bl233[18] - checking the 'BLASTER' index of the upgrade_status[] array
 
-	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
-	
-	if(ent -> client -> pers.characterLevel == 1 && ent -> client -> upgrade_status == THIRD_PATH)
+	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == FIRST_PATH)
 	{
-		
+		fire_blaster(ent, start, forward, damage, 4000, effect, hyper);
+		gi.bprintf(PRINT_HIGH, "double blammo");
+		/*ent -> client -> pers.experiencePoints - 10;
+		if(ent -> client -> pers.experiencePoints < 0)
+		{
+			ent -> client -> pers.experiencePoints = 0;
+		}*/
+	}
+	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == SECOND_PATH)
+	{
+		damage*=10;
+		gi.bprintf(PRINT_HIGH,"Ow!");
+		/*ent -> client -> pers.experiencePoints - 10;
+		if(ent -> client -> pers.characterLevel < 0)
+		{
+			ent -> client -> pers.experiencePoints = 0;
+		}*/
+	}
+	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == THIRD_PATH)
+	{
+		fire_bfg (ent, start, forward, damage, 400, 1000);
+		//ent -> client -> pers.experiencePoints - 10;
+	}	
+
+	fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
@@ -869,41 +873,6 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 	
-	/*if(ent -> client -> pers.experiencePoints >= 500)//bl233[4]
-	{
-		gi.cprintf (ent, PRINT_HIGH, "press 'F' for the multishot path \n press 'M' for the damage path \n press 'N' for the speed route");
-		if(ent -> client -> upgrade_status == FIRST_PATH)
-		{
-			int timeElapsed = level.time + 1;
-			if(timeElapsed > level.time)
-			{
-				fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
-			}
-			ent -> client -> pers.experiencePoints - 500;
-			if(ent -> client -> pers.experiencePoints < 0)
-			{
-				ent -> client -> pers.experiencePoints = 0;
-			}
-		}
-		if(ent ->owner -> client ->upgrade_status == SECOND_PATH)
-		{
-			damage *= 3;
-			ent -> client -> pers.experiencePoints - 500;
-			if(ent -> client -> pers.experiencePoints < 0)
-			{
-				ent -> client -> pers.experiencePoints = 0;
-			}
-		}
-		if(ent ->owner ->client ->upgrade_status == THIRD_PATH)
-		{	
-			fire_bfg (ent, start, forward, damage, 400, 200);
-		}
-		ent -> client -> pers.experiencePoints - 500;
-		if(ent -> client -> pers.experiencePoints < 0)
-		{
-			ent -> client -> pers.experiencePoints = 0;
-		}*/
-	}
 }
 
 
@@ -1326,7 +1295,28 @@ void weapon_supershotgun_fire (edict_t *ent)
 	v[YAW]   = ent->client->v_angle[YAW] - 5;
 	v[ROLL]  = ent->client->v_angle[ROLL];
 	AngleVectors (v, forward, NULL, NULL);
+
 	fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+
+	//bl233[23]
+	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
+	{
+		kick *= 10;
+		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+		gi.centerprintf(ent, "damage is %i", damage);
+	}
+	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
+	{
+		damage *= 10;
+		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+		gi.centerprintf(ent, "damage is %i", damage);
+	}
+	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	{
+		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+	}
+
 	v[YAW]   = ent->client->v_angle[YAW] + 5;
 	AngleVectors (v, forward, NULL, NULL);
 	fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
