@@ -673,8 +673,8 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 #define DEFAULT_BULLET_VSPREAD	500
 #define DEFAULT_SHOTGUN_HSPREAD	1000
 #define DEFAULT_SHOTGUN_VSPREAD	500
-#define BENS_SHOTGUN_HSPREAD_MODIFIER 3000	//bl233[21] - attempting to create my own custom horizontal spread for a path
-#define BENS_SHOTGUN_VSPREAD_MODIFIER 1500	//bl233[22] - same as above except for vertical spread
+#define BENS_SHOTGUN_HSPREAD_MODIFIER 4000	//bl233[21] - attempting to create my own custom horizontal spread for a path
+#define BENS_SHOTGUN_VSPREAD_MODIFIER 2000	//bl233[22] - same as above except for vertical spread
 #define DEFAULT_DEATHMATCH_SHOTGUN_COUNT	12
 #define DEFAULT_SHOTGUN_COUNT	12
 #define DEFAULT_SSHOTGUN_COUNT	20

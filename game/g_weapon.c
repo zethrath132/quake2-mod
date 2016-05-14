@@ -200,15 +200,18 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 					gi.multicast (tr.endpos, MULTICAST_PVS);
 				}
 
+				//bl233[25] - by commenting out this code, it stops my weapon mods
+				//from crashing when I hit the water.  For the longest time,
+				//that issue kept plaguing me.  Glad its dead now though
 				// change bullet's course when it enters water
-				VectorSubtract (end, start, dir);
+				/*VectorSubtract (end, start, dir);
 				vectoangles (dir, dir);
 				AngleVectors (dir, forward, right, up);
 				r = crandom()*hspread*2;
 				u = crandom()*vspread*2;
 				VectorMA (water_start, 8192, forward, end);
 				VectorMA (end, r, right, end);
-				VectorMA (end, u, up, end);
+				VectorMA (end, u, up, end);*/
 			}
 
 			// re-trace ignoring water this time

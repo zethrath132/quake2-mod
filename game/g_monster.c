@@ -536,11 +536,12 @@ void monster_death_use (edict_t *self)
 		if(self -> enemy -> client -> pers.characterLevel == 3 && self -> enemy -> client -> pers.experiencePoints >= 40)
 		{
 			gi.bprintf(PRINT_HIGH, "Did I hit 4?");
-			self -> enemy -> client -> pers.characterLevel == 4;
+			self -> enemy -> client -> pers.characterLevel = 4;
 			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
 		}
 		if(self -> enemy -> client -> pers.characterLevel == 4 && self -> enemy -> client -> pers.experiencePoints >= 50)
 		{
+			gi.bprintf(PRINT_HIGH, "Did I hit 5?");
 			self -> enemy -> client -> pers.characterLevel = 5;
 			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
 		}
@@ -568,6 +569,15 @@ void monster_death_use (edict_t *self)
 		{
 			self -> enemy -> client -> pers.characterLevel = 10;
 			gi.centerprintf(self -> enemy, "LEVEL UP! You are now level %i!\nUse 'f', 'm', or 'n' \n to buy your next skill!", self -> enemy -> client -> pers.characterLevel);
+		}
+		if(self -> enemy -> client -> pers.characterLevel == 10 && self -> enemy -> client -> pers.experiencePoints >= 110)
+		{
+			if(self -> enemy -> client -> pers.experiencePoints > 110)
+			{
+				self -> enemy -> client -> pers.experiencePoints = 110;//bl233[26] - puts a maximum cap to the experiece points
+			}
+			self -> enemy -> client -> pers.characterLevel = 11;
+			gi.centerprintf(self -> enemy, "LEVEL UP!  You are now at maxed level.\nChoose your last path with\n'f', 'm', or'n'.");
 		}
 	}
 	if (self->item)

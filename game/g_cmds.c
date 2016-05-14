@@ -950,7 +950,7 @@ void SecondPath (edict_t *ent)
 	{
 		ent -> client -> pers.upgrade_status[index] = SECOND_PATH;
 	}
-	gi.centerprintf (ent,"You have now locked in Path\nfor this weapon");
+	gi.centerprintf (ent,"You have now locked in Path2\nfor this weapon");
 }
 
 void ThirdPath (edict_t *ent)

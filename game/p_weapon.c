@@ -836,8 +836,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 
 	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == FIRST_PATH)
 	{
-		fire_blaster(ent, start, forward, damage, 4000, effect, hyper);
-		gi.bprintf(PRINT_HIGH, "double blammo");
+		fire_blaster(ent, start, forward, damage*=2, 4000, effect, hyper);
 		/*ent -> client -> pers.experiencePoints - 10;
 		if(ent -> client -> pers.experiencePoints < 0)
 		{
@@ -847,7 +846,6 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == SECOND_PATH)
 	{
 		damage*=10;
-		gi.bprintf(PRINT_HIGH,"Ow!");
 		/*ent -> client -> pers.experiencePoints - 10;
 		if(ent -> client -> pers.characterLevel < 0)
 		{
@@ -1031,7 +1029,9 @@ void Machinegun_Fire (edict_t *ent)
 	ent->client->kick_angles[0] = ent->client->machinegun_shots * -1.5;
 
 	// raise the gun as it is firing
-	if (!deathmatch->value)
+	// bl233[27] - checks to see if the path isn't the first path; if it is
+	// the weapon shouldn't raise
+	if (!deathmatch->value && !ent -> client -> pers.upgrade_status == FIRST_PATH)
 	{
 		ent->client->machinegun_shots++;
 		if (ent->client->machinegun_shots > 9)
@@ -1043,6 +1043,17 @@ void Machinegun_Fire (edict_t *ent)
 	AngleVectors (angles, forward, right, NULL);
 	VectorSet(offset, 0, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+
+	// increases damage done by each bullet by 5x if you use the second path
+	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[MACHINEGUN] == SECOND_PATH)
+	{
+		damage *= 5;
+	}
+	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[MACHINEGUN] == THIRD_PATH)
+	{
+		damage /= 2;
+	}
+
 	fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
 
 	gi.WriteByte (svc_muzzleflash);
@@ -1051,6 +1062,16 @@ void Machinegun_Fire (edict_t *ent)
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
+
+	//bl233[28] - third path gives infinite ammo at the cost of 2x less damage
+	if (ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[MACHINEGUN] == THIRD_PATH)
+	{
+		ent -> client -> pers.inventory[ent -> client -> ammo_index]++;
+		if(ent -> client -> pers.inventory[ent -> client -> ammo_index] > 200)
+		{
+			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 200;
+		}
+	}
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
@@ -1241,6 +1262,25 @@ void weapon_shotgun_fire (edict_t *ent)
 		kick *= 4;
 	}
 
+	//bl233[23]
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
+	{
+		gi.bprintf(PRINT_HIGH, "is this even being read?");
+		damage *= 10;
+		kick *= 10;
+		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
+	}
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
+	{
+		fire_shotgun (ent, start, forward, damage, kick, 1000, 1000, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+		gi.centerprintf(ent, "damage is %i", damage);
+		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
+	}
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	{
+		damage/=2;
+	}
+
 	if (deathmatch->value)
 		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
 	else
@@ -1257,6 +1297,14 @@ void weapon_shotgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	if (ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	{
+		ent -> client -> pers.inventory[ent -> client -> ammo_index]++;
+		if(ent -> client -> pers.inventory[ent -> client -> ammo_index] > 30)
+		{
+			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 30;
+		}
+	}
 }
 
 void Weapon_Shotgun (edict_t *ent)
@@ -1297,24 +1345,23 @@ void weapon_supershotgun_fire (edict_t *ent)
 	AngleVectors (v, forward, NULL, NULL);
 
 	fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-
-	//bl233[23]
-	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
-	{
-		kick *= 10;
-		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-		gi.centerprintf(ent, "damage is %i", damage);
-	}
-	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
+	
+	//bl233[23] - gave the same weapon grants as the normal shotgun, just with better specs
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
 	{
 		damage *= 10;
-		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-		gi.centerprintf(ent, "damage is %i", damage);
+		kick *= 10;
+		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	}
-	if(ent -> client -> pers.characterLevel >= 3 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
 	{
 		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
+		gi.centerprintf(ent, "damage is %i", damage);
+		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
+	}
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	{
+		damage/=2;
 	}
 
 	v[YAW]   = ent->client->v_angle[YAW] + 5;
@@ -1326,12 +1373,21 @@ void weapon_supershotgun_fire (edict_t *ent)
 	gi.WriteShort (ent-g_edicts);
 	gi.WriteByte (MZ_SSHOTGUN | is_silenced);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
-
 	ent->client->ps.gunframe++;
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= 2;
+	if (ent -> client -> pers.characterLevel >= 4 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	{
+		//my attempt at making infinite ammo
+		ent -> client -> pers.inventory[ent -> client -> ammo_index]++;
+		if( ent -> client -> pers.inventory[ent -> client -> ammo_index] > 30)
+		{
+			//setting a maximum to the ammo count
+			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 30;
+		}
+	}
 }
 
 void Weapon_SuperShotgun (edict_t *ent)
