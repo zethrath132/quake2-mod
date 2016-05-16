@@ -565,8 +565,8 @@ void flyer_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 {
 	gi.sound (self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
 	BecomeExplosion1(self);
-	self -> enemy -> client -> pers.experiencePoints += self -> mass/25;//bl233[5] - adds experience upon death
-	gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
+	//self -> enemy -> client -> pers.experiencePoints += self -> mass/25;//bl233[5] - adds experience upon death
+	//gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 }
 	
 

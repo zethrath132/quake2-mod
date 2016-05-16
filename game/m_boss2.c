@@ -27,6 +27,7 @@ boss2
 
 #include "g_local.h"
 #include "m_boss2.h"
+//#include "g_items.c"
 
 void BossExplode (edict_t *self);
 
@@ -537,7 +538,7 @@ void boss2_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 #endif
 	//inflictor -> client -> pers.experiencePoints += 1000;//bl233[5] - adds experience upon death
 	//gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
-	self -> enemy -> speed += 200; //bl233[10] - increases the killer's speed by 200 upon death
+	SpawnItem(self, FindItem("item_speedster"));
 }
 
 qboolean Boss2_CheckAttack (edict_t *self)

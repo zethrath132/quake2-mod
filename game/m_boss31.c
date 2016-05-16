@@ -594,8 +594,12 @@ void jorg_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 	self->s.sound = 0;
 	self->count = 0;
 	self->monsterinfo.currentmove = &jorg_move_death;
-	//inflictor -> client -> pers.experiencePoints += 2000;//bl233[5] - adds experience upon death
-	//gi.bprintf(PRINT_HIGH,"%i exp gained",inflictor -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
+	SpawnItem(self, FindItem("item_steroids"));
+	SpawnItem(self, FindItem("item_bandolier"));
+	SpawnItem(self, FindItem("item_ancient_head"));
+	SpawnItem(self, FindItem("item_thorn_mail"));
+	SpawnItem(self, FindItem("item_god_armor"));
+	SpawnItem(self, FindItem("item_silencer"));
 }
 
 qboolean Jorg_CheckAttack (edict_t *self)

@@ -208,6 +208,31 @@ qboolean Pickup_Adrenaline (edict_t *ent, edict_t *other)
 	return true;
 }
 
+qboolean Pickup_Steroids (edict_t *ent, edict_t *other)
+{
+	ent -> client -> pers.max_health += 100;
+	return true;
+}
+
+qboolean Pickup_God_Armor(edict_t *ent, edict_t *other)//bl233[God Armor]
+{
+	if(ent->client->damage_blood > 1)
+	{
+		ent->client->pers.health += ent->client->damage_blood;
+		ent->client->damage_knockback = 0;
+	}
+	return true;
+}
+
+qboolean Pickup_Thorn_Mail(edict_t *ent, edict_t *other)
+{
+	if(ent->client->damage_blood)
+	{
+		ent->enemy->health -= ent->client->damage_blood;
+	}
+	return true;
+}
+
 qboolean Pickup_AncientHead (edict_t *ent, edict_t *other)
 {
 	other->max_health += 2;
@@ -418,6 +443,12 @@ void	Use_Silencer (edict_t *ent, gitem_t *item)
 }
 
 //======================================================================
+
+/*void	Use_Speedster (edict_t *ent, gitem_t *item)//bl233[34]
+{
+	ValidateSelectedItem (ent);
+	ent->client->pers.max_health += 100;
+}*/
 
 qboolean Pickup_Key (edict_t *ent, edict_t *other)
 {
@@ -750,6 +781,8 @@ void Drop_PowerArmor (edict_t *ent, gitem_t *item)
 		Use_PowerArmor (ent, item);
 	Drop_General (ent, item);
 }
+
+
 
 //======================================================================
 
@@ -1731,6 +1764,71 @@ always owned, never in the world
 /* precache */ ""
 	},
 
+	/*bl233[33] - steroids
+*/
+	{
+		"item_steroids",
+		Pickup_Steroids,
+		NULL,
+		NULL,
+		NULL,
+		"items/pkup.wav",
+		"models/items/adrenal/tris.md2", EF_ROTATE,
+		NULL,
+/* icon */		"",
+/* pickup */	"Steroid",
+/* width */		2,
+		60,
+		NULL,
+		0,
+		0,
+		NULL,
+		0,
+/* precache */ ""
+	},
+
+	{
+		"item_god_armor",
+		Pickup_God_Armor,
+		NULL,
+		NULL,
+		NULL,
+		"items/pkup.wav",
+		"models/items/enviro/tris.md2", EF_ROTATE,
+		NULL,
+/* icon */		"",
+/* pickup */	"God Armor",
+/* width */		2,
+		60,
+		NULL,
+		0,
+		0,
+		NULL,
+		0,
+/* precache */ ""
+	},
+
+	{
+		"item_thorn_mail",
+		Pickup_Thorn_Mail,
+		NULL,
+		NULL,
+		NULL,
+		"items/pkup.wav",
+		"models/items/enviro/tris.md2", EF_ROTATE,
+		NULL,
+/* icon */		"",
+/* pickup */	"Thorn Mail",
+/* width */		2,
+		60,
+		NULL,
+		0,
+		0,
+		NULL,
+		0,
+/* precache */ ""
+	},
+
 /*QUAKED item_breather (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
@@ -1754,6 +1852,8 @@ always owned, never in the world
 /* precache */ "items/airout.wav"
 	},
 
+
+
 /*QUAKED item_enviro (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
@@ -1776,6 +1876,7 @@ always owned, never in the world
 		0,
 /* precache */ "items/airout.wav"
 	},
+
 
 /*QUAKED item_ancient_head (.3 .3 1) (-16 -16 -16) (16 16 16)
 Special item that gives +2 to maximum health

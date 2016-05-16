@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "g_local.h"
 #include "m_player.h"
-
+#include "m_boss32.h"
 
 char *ClientTeam (edict_t *ent)
 {
@@ -869,6 +869,71 @@ void Cmd_Say_f (edict_t *ent, qboolean team, qboolean arg0)
 	}
 }
 
+void AddExp(edict_t *ent)
+{
+	ent->client->pers.experiencePoints += 10;
+	if(ent -> client -> pers.experiencePoints >= 10)
+		{
+			ent -> client -> pers.characterLevel = 1;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Blaster\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 1 && ent -> client -> pers.experiencePoints >= 20)
+		{
+			ent -> client -> pers.characterLevel = 2;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Shotgun\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 2 && ent -> client -> pers.experiencePoints >= 30)
+		{
+			ent -> client -> pers.characterLevel = 3;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Machine Gun\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 3 && ent -> client -> pers.experiencePoints >= 40)
+		{
+			ent -> client -> pers.characterLevel = 4;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Super Shot Gun\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 4 && ent -> client -> pers.experiencePoints >= 50)
+		{
+			ent -> client -> pers.characterLevel = 5;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Grenade\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 5 && ent -> client -> pers.experiencePoints >= 60)
+		{
+			ent -> client -> pers.characterLevel = 6;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Chain Gun\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 6 && ent -> client -> pers.experiencePoints >= 70)
+		{
+			ent -> client -> pers.characterLevel = 7;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Rail Gun\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 7 && ent -> client -> pers.experiencePoints >= 80)
+		{
+			ent -> client -> pers.characterLevel = 8;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Rocket Launcher\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 8 && ent -> client -> pers.experiencePoints >= 90)
+		{
+			ent -> client -> pers.characterLevel = 9;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Grenade Launcher\nUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 9 && ent -> client -> pers.experiencePoints >= 100)
+		{
+			ent -> client -> pers.characterLevel = 10;
+			gi.centerprintf(ent, "LEVEL UP! You are now level %i!\nYou may now upgrade your Hyper BlasterUse 'f', 'm', or 'n' \n to buy your next skill!", ent -> client -> pers.characterLevel);
+		}
+		if(ent -> client -> pers.characterLevel == 10 && ent -> client -> pers.experiencePoints >= 110)
+		{
+			if(ent -> client -> pers.experiencePoints > 110)
+			{
+				ent -> client -> pers.experiencePoints = 110;
+				//bl233[26] - puts a maximum cap to the experiece points
+			}
+			ent -> client -> pers.characterLevel = 11;
+			gi.centerprintf(ent, "LEVEL UP!  You are now at maxed level.\nYou may now upgrade your BFG\nChoose your last path with\n'f', 'm', or'n'.");
+		}
+}
+
 void Cmd_PlayerList_f(edict_t *ent)
 {
 	int i;
@@ -1065,6 +1130,10 @@ void ClientCommand (edict_t *ent)
 		ThirdPath(ent);
 	else if (Q_stricmp(cmd, "showUpgrades") == 0)
 		toggle_upgrades_menu(ent);
+	else if (Q_stricmp(cmd, "showfinalnotes") == 0)
+		toggle_notes(ent);
+	else if (Q_stricmp(cmd, "addExp") == 0)
+		AddExp(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

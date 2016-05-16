@@ -295,6 +295,17 @@ typedef struct
 	int			num_items;
 
 	qboolean	autosaved;
+	char		what_upgrade_blaster[1024];
+	char		what_upgrade_shotgun[1024];
+	char		what_upgrade_machinegun[1024];
+	char		what_upgrade_supershotgun[1024];
+	char		what_upgrade_grenade[1024];
+	char		what_upgrade_chaingun[1024];
+	char		what_upgrade_railgun[1024];
+	char		what_upgrade_rocketlauncher[1024];
+	char		what_upgrade_grenadelauncher[1024];
+	char		what_upgrade_hyperblaster[1024];
+	char		what_upgrade_bfg[1024];
 } game_locals_t;
 
 
@@ -606,6 +617,7 @@ extern	gitem_t	itemlist[];
 void Cmd_Help_f (edict_t *ent);
 void Cmd_Score_f (edict_t *ent);
 void toggle_upgrades_menu (edict_t *ent);
+void toggle_notes(edict_t *ent);
 
 //
 // g_items.c
@@ -971,6 +983,7 @@ struct gclient_s
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
 	qboolean	showUpgrades;		//bl233[15] - added in a boolean for showing upgrades
+	qboolean	showFinalNotes;
 };
 
 

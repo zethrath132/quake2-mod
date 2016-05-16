@@ -291,7 +291,189 @@ void Cmd_Score_f (edict_t *ent)
 	DeathmatchScoreboard (ent);
 }
 
+void set_upgrade_message(edict_t *ent)
+{
+	if(ent -> client -> pers.upgrade_status[BLASTER] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_blaster, sizeof(game.what_upgrade_blaster), "Rail Blaster");
+	}
+	if(ent -> client -> pers.upgrade_status[BLASTER] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_blaster, sizeof(game.what_upgrade_blaster), "1 Blast 1 Kill");
+	}
+	if(ent -> client -> pers.upgrade_status[BLASTER] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_blaster, sizeof(game.what_upgrade_blaster), "Blasting BFGs");
+	}
+	if(ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_shotgun, sizeof(game.what_upgrade_shotgun), "Shotgun Mega Damage");
+	}
+	if(ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_shotgun, sizeof(game.what_upgrade_shotgun), "Big Burst Shotgun");
+	}
+	if(ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_shotgun, sizeof(game.what_upgrade_shotgun), "Infinite Shotgun Ammo!");
+	}
+	if(ent -> client -> pers.upgrade_status[MACHINEGUN] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_machinegun, sizeof(game.what_upgrade_machinegun), "Machinegun Steady Hands");
+	}
+	if(ent -> client -> pers.upgrade_status[MACHINEGUN] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_machinegun, sizeof(game.what_upgrade_machinegun), "Machinegun PAIN!!!!");
+	}
+	if(ent -> client -> pers.upgrade_status[MACHINEGUN] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_machinegun, sizeof(game.what_upgrade_machinegun), "Infinite Machinegun Ammo!");
+	}
+	if(ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_supershotgun, sizeof(game.what_upgrade_supershotgun), "Super Shotgun Super Damage");
+	}
+	if(ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_supershotgun, sizeof(game.what_upgrade_supershotgun), "Super Shotgun Super Spread");
+	}
+	if(ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_supershotgun, sizeof(game.what_upgrade_supershotgun), "Infinite Super Ammo!!!");
+	}
+	if(ent -> client -> pers.upgrade_status[GRENADE] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_grenade, sizeof(game.what_upgrade_grenade), "Speedster Grenade");
+	}
+	if(ent -> client -> pers.upgrade_status[GRENADE] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_grenade, sizeof(game.what_upgrade_grenade), "Big Fat Grenade");
+	}
+	if(ent -> client -> pers.upgrade_status[GRENADE] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_grenade, sizeof(game.what_upgrade_grenade), "Infinite Grenades");
+	}
+	if(ent -> client -> pers.upgrade_status[CHAINGUN] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_chaingun, sizeof(game.what_upgrade_chaingun), "Chaingun: Chaining Pain");
+	}
+	if(ent -> client -> pers.upgrade_status[CHAINGUN] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_chaingun, sizeof(game.what_upgrade_chaingun), "Chaingun: The Barrage of BFGs");
+	}
+	if(ent -> client -> pers.upgrade_status[CHAINGUN] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_chaingun, sizeof(game.what_upgrade_chaingun), "Chaingun: Hold that Trigger Down");
+	}
+	if(ent -> client -> pers.upgrade_status[RAILGUN] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_railgun, sizeof(game.what_upgrade_railgun), "Railgun Snipe");
+	}
+	if(ent -> client -> pers.upgrade_status[RAILGUN] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_railgun, sizeof(game.what_upgrade_railgun), "Double Down Rail Pound");
+	}
+	if(ent -> client -> pers.upgrade_status[RAILGUN] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_railgun, sizeof(game.what_upgrade_railgun), "Rails for Dayz!!!");
+	}
+	if(ent -> client -> pers.upgrade_status[ROCKETLAUNCHER] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_rocketlauncher, sizeof(game.what_upgrade_rocketlauncher), "Rocket Launching Massive Damage");
+	}
+	if(ent -> client -> pers.upgrade_status[ROCKETLAUNCHER] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_rocketlauncher, sizeof(game.what_upgrade_rocketlauncher), "Big Fat Rockets!!!");
+	}
+	if(ent -> client -> pers.upgrade_status[ROCKETLAUNCHER] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_rocketlauncher, sizeof(game.what_upgrade_rocketlauncher), "INFINITE ROCKETS!");
+	}
+	if(ent -> client -> pers.upgrade_status[GRENADELAUNCHER] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_grenadelauncher, sizeof(game.what_upgrade_grenadelauncher), "Flying Fat Grenades");
+	}
+	if(ent -> client -> pers.upgrade_status[GRENADELAUNCHER] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_grenadelauncher, sizeof(game.what_upgrade_grenadelauncher), "Double Flying Grenades");
+	}
+	if(ent -> client -> pers.upgrade_status[GRENADELAUNCHER] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_grenadelauncher, sizeof(game.what_upgrade_grenadelauncher), "Launching Infinite Grenades");
+	}
+	if(ent -> client -> pers.upgrade_status[HYPERBLASTER] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_hyperblaster), "Needler? Hurts like it!");
+	}
+	if(ent -> client -> pers.upgrade_status[HYPERBLASTER] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_hyperblaster), "Hyper Rail");
+	}
+	if(ent -> client -> pers.upgrade_status[HYPERBLASTER] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_hyperblaster), "Hyper Blaster: Bang, Bang, Bang!");
+	}
+	if(ent -> client -> pers.upgrade_status[BFG] == FIRST_PATH)
+	{
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_bfg), "BFG ONE SHOT KILL");
+	}
+	if(ent -> client -> pers.upgrade_status[BFG] == SECOND_PATH)
+	{
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_bfg), "BFG OMNI FIRE POWER!!!!");
+	}
+	if(ent -> client -> pers.upgrade_status[BFG] == THIRD_PATH)
+	{
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_bfg), "INFINITE BFG");
+	}
+}
+
+
+
 void UpgradeBckgrnd (edict_t *ent)
+{
+	//how many characters are in the confix string that are passed to the server
+	char	string[1024];
+	set_upgrade_message(ent);
+
+	// send the layout
+	Com_sprintf (string, sizeof(string),
+		//%f is a float, %i is an int, %s is a string
+		"xv 32 yv 8 picn inventory "		// background
+		//will not receive \n.  The below the example shows a hardcoded string
+		"xv 0 yv 36 cstring2 \"Current Power Up Paths\" "
+		"xv 0 yv 60 cstring2 \"%s\" "		
+		//below example is a format string passed through the %s in the code that
+		//correlates with the variables below  (1 to 1)
+		"xv 0 yv 72 cstring2 \"%s\" "		// help 1
+		"xv 0 yv 84 cstring2 \"%s\" "		// help 2
+		"xv 0 yv 96 cstring2 \"%s\" "
+		"xv 0 yv 108 cstring2 \"%s\" "
+		"xv 0 yv 120 cstring2 \"%s\" "
+		"xv 0 yv 132 cstring2 \"%s\" "
+		"xv 0 yv 144 cstring2 \"%s\" "
+		"xv 0 yv 156 cstring2 \"%s\" "
+		"xv 0 yv 168 cstring2 \"%s\" "
+		"xv 0 yv 180 cstring2 \"%s\" "
+		"xv 0 yv 192 cstring2 \"%s\" ",
+
+		game.what_upgrade_blaster,
+		game.what_upgrade_shotgun,
+		game.what_upgrade_machinegun,
+		game.what_upgrade_supershotgun,
+		game.what_upgrade_grenade,
+		game.what_upgrade_chaingun,
+		game.what_upgrade_railgun,
+		game.what_upgrade_rocketlauncher,
+		game.what_upgrade_grenadelauncher,
+		game.what_upgrade_hyperblaster,
+		game.what_upgrade_bfg);
+
+	gi.WriteByte (svc_layout);
+	gi.WriteString (string);
+	gi.unicast (ent, true);
+}
+
+void Final_Notes (edict_t *ent)
 {
 	//how many characters are in the confix string that are passed to the server
 	char	string[1024];
@@ -301,19 +483,11 @@ void UpgradeBckgrnd (edict_t *ent)
 		//%f is a float, %i is an int, %s is a string
 		"xv 32 yv 8 picn inventory "		// background
 		//will not receive \n.  The below the example shows a hardcoded string
-		"xv 0 yv 24 cstring2 \"Double Shot\" "		// level name
+		"xv 0 yv 36 cstring2 \"My Thoughts and Notes\" "
+		"xv 0 yv 72 cstring2 \"Starting out this project\" "),		
 		//below example is a format string passed through the %s in the code that
 		//correlates with the variables below  (1 to 1)
-		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
-		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
-		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
-		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ", 
 
-		game.helpmessage1,
-		game.helpmessage2,
-		level.killed_monsters, level.total_monsters, 
-		level.found_goals, level.total_goals,
-		level.found_secrets, level.total_secrets);
 
 	gi.WriteByte (svc_layout);
 	gi.WriteString (string);
@@ -413,6 +587,23 @@ void toggle_upgrades_menu (edict_t *ent)
 	UpgradeBckgrnd (ent);
 }
 
+void toggle_notes (edict_t *ent)
+{
+	ent->client->showinventory = false;
+	ent->client->showscores = false;
+	ent->client->showhelp = false;
+	ent->client->showUpgrades = false;
+
+	if (ent->client->showFinalNotes)
+	{
+		ent->client->showFinalNotes = false;
+		return;
+	}
+
+	ent->client->showFinalNotes = true;
+	Final_Notes (ent);
+}
+
 
 //=======================================================================
 
@@ -436,12 +627,14 @@ void G_SetStats (edict_t *ent)
 	//
 	//experience points
 	//
-	ent->client->ps.stats[STAT_EXPERIENCE] = ent->client->pers.experiencePoints;//stat index experience
+	ent->client->ps.stats[STAT_EXPERIENCE] = ent->client->pers.experiencePoints;
+	//stat index experience
 
 	//
 	//levels
 	//
-	ent->client->ps.stats[CURRENT_LEVEL] = ent->client->pers.characterLevel;//stat index character level
+	ent->client->ps.stats[CURRENT_LEVEL] = ent->client->pers.characterLevel;
+	//stat index character level
 
 	//
 	// ammo

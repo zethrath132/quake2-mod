@@ -156,16 +156,17 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 		VectorMA (end, r, right, end);
 		VectorMA (end, u, up, end);
 
-		if (gi.pointcontents (start) & MASK_WATER)
+		/*if (gi.pointcontents (start) & MASK_WATER)
 		{
 			water = true;
 			VectorCopy (start, water_start);
 			content_mask &= ~MASK_WATER;
-		}
+		}*/
 
 		tr = gi.trace (start, NULL, NULL, end, self, content_mask);
 
 		// see if we hit water
+		// bl233[29]
 		if (tr.contents & MASK_WATER)
 		{
 			int		color;
@@ -189,7 +190,7 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 				else
 					color = SPLASH_UNKNOWN;
 
-				if (color != SPLASH_UNKNOWN)
+				/*if (color != SPLASH_UNKNOWN)
 				{
 					gi.WriteByte (svc_temp_entity);
 					gi.WriteByte (TE_SPLASH);
@@ -198,20 +199,20 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 					gi.WriteDir (tr.plane.normal);
 					gi.WriteByte (color);
 					gi.multicast (tr.endpos, MULTICAST_PVS);
-				}
+				}*/
 
 				//bl233[25] - by commenting out this code, it stops my weapon mods
 				//from crashing when I hit the water.  For the longest time,
 				//that issue kept plaguing me.  Glad its dead now though
 				// change bullet's course when it enters water
-				/*VectorSubtract (end, start, dir);
+				VectorSubtract (end, start, dir);
 				vectoangles (dir, dir);
 				AngleVectors (dir, forward, right, up);
 				r = crandom()*hspread*2;
 				u = crandom()*vspread*2;
 				VectorMA (water_start, 8192, forward, end);
 				VectorMA (end, r, right, end);
-				VectorMA (end, u, up, end);*/
+				VectorMA (end, u, up, end);
 			}
 
 			// re-trace ignoring water this time
@@ -220,6 +221,7 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 	}
 
 	// send gun puff / flash
+
 	if (!((tr.surface) && (tr.surface->flags & SURF_SKY)))
 	{
 		if (tr.fraction < 1.0)
@@ -246,7 +248,8 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 	}
 
 	// if went through water, determine where the end and make a bubble trail
-	if (water)
+	//bl233[28] - uncomment if it's causing too many crashes
+	/*if (water)
 	{
 		vec3_t	pos;
 
@@ -266,7 +269,8 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 		gi.WritePosition (water_start);
 		gi.WritePosition (tr.endpos);
 		gi.multicast (pos, MULTICAST_PVS);
-	}
+	}*/
+  //}
 }
 
 

@@ -29,6 +29,7 @@ static byte		is_silenced;
 
 void weapon_grenade_fire (edict_t *ent, qboolean held);
 void weapon_bfg_fire (edict_t *ent);
+void weapon_railgun_fir(edict_t *ent);
 
 
 static void P_ProjectSource (gclient_t *client, vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
@@ -565,11 +566,35 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 
 	timer = ent->client->grenade_time - level.time;
 	speed = GRENADE_MINSPEED + (GRENADE_TIMER - timer) * ((GRENADE_MAXSPEED - GRENADE_MINSPEED) / GRENADE_TIMER);
+
+	if(ent->client->pers.characterLevel >= 5 && ent->client->pers.upgrade_status[GRENADE] == FIRST_PATH)
+	{
+		speed = 1000;
+		timer = 1;
+	}
+	if(ent->client->pers.characterLevel >= 5 && ent->client->pers.upgrade_status[GRENADE] == SECOND_PATH)
+	{
+		damage*= 10;
+		radius*=2;
+	}
+	if(ent->client->pers.characterLevel >= 5 && ent->client->pers.upgrade_status[GRENADE] == THIRD_PATH)
+	{
+		radius/2;
+		damage/2;
+	}
+
 	fire_grenade2 (ent, start, forward, damage, speed, timer, radius, held);
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
-
+	if(ent->client->pers.characterLevel >= 5 && ent->client->pers.upgrade_status[GRENADE] == THIRD_PATH)
+	{
+		ent->client->pers.inventory[ent->client->ammo_index]++;
+		if(ent->client->pers.inventory[ent->client->ammo_index] > 40)
+		{
+			ent->client->pers.inventory[ent->client->ammo_index] = 40;
+		}
+	}
 	ent->client->grenade_time = level.time + 1.0;
 
 	if(ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
@@ -727,7 +752,22 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[GRENADELAUNCHER] == FIRST_PATH)
+	{
+		damage*=10;
+		radius*1.5;
+	}
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[GRENADELAUNCHER] == THIRD_PATH)
+	{
+		damage/2;
+	}
+
 	fire_grenade (ent, start, forward, damage, 600, 2.5, radius);
+
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[GRENADELAUNCHER] == SECOND_PATH)
+	{
+		fire_grenade(ent, start, forward, damage*2, 1000, 1, radius);
+	}
 
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
@@ -740,6 +780,15 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[GRENADELAUNCHER] == THIRD_PATH)
+	{
+		ent->client->pers.inventory[ent->client->ammo_index]++;
+		if(ent->client->pers.inventory[ent->client->ammo_index] > 30)
+		{
+			ent->client->pers.inventory[ent->client->ammo_index] = 30;
+		}
+	}
 }
 
 void Weapon_GrenadeLauncher (edict_t *ent)
@@ -782,6 +831,23 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[ROCKETLAUNCHER] == FIRST_PATH)
+	{
+		damage*=10;
+	}
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[ROCKETLAUNCHER] == SECOND_PATH)
+	{
+		damage_radius*10;
+		radius_damage*10;
+	}
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[ROCKETLAUNCHER] == THIRD_PATH)
+	{
+		damage_radius = damage_radius - (damage_radius*.8);
+		radius_damage = radius_damage;
+		damage*2;
+	}
+
 	fire_rocket (ent, start, forward, damage, 650, damage_radius, radius_damage);
 
 	// send muzzle flash
@@ -796,6 +862,14 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[ROCKETLAUNCHER] == THIRD_PATH)
+	{
+		ent->client->pers.inventory[ent->client->ammo_index]++;
+		if(ent->client->pers.inventory[ent->client->ammo_index] > 50)
+		{
+			ent->client->pers.inventory[ent->client->ammo_index] = 50;
+		}
+	}
 }
 
 void Weapon_RocketLauncher (edict_t *ent)
@@ -836,28 +910,18 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 
 	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == FIRST_PATH)
 	{
-		fire_blaster(ent, start, forward, damage*=2, 4000, effect, hyper);
-		/*ent -> client -> pers.experiencePoints - 10;
-		if(ent -> client -> pers.experiencePoints < 0)
-		{
-			ent -> client -> pers.experiencePoints = 0;
-		}*/
+		damage *= 2;
+		fire_rail (ent, start, forward, damage, 250);
 	}
 	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == SECOND_PATH)
 	{
 		damage*=10;
-		/*ent -> client -> pers.experiencePoints - 10;
-		if(ent -> client -> pers.characterLevel < 0)
-		{
-			ent -> client -> pers.experiencePoints = 0;
-		}*/
 	}
 	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == THIRD_PATH)
 	{
 		fire_bfg (ent, start, forward, damage, 400, 1000);
-		//ent -> client -> pers.experiencePoints - 10;
 	}	
-
+	
 	fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
 
 	// send muzzle flash
@@ -876,13 +940,33 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 
 void Weapon_Blaster_Fire (edict_t *ent)
 {
+	vec3_t	forward, right;
+	vec3_t	start;
+	vec3_t	offset;
 	int		damage;
 
 	if (deathmatch->value)
 		damage = 15;
 	else
 		damage = 10;
+
 	Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
+
+	/*if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == FIRST_PATH)
+	{
+		damage *= 2;
+		fire_rail (ent, start, forward, damage, 250);
+	}
+	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == SECOND_PATH)
+	{
+		damage*=10;
+	}
+	if(ent -> client -> pers.characterLevel >= 1 && ent -> client -> pers.upgrade_status[BLASTER] == THIRD_PATH)
+	{
+		fire_bfg (ent, start, forward, damage, 400, 1000);
+	}	
+	//bl233[blaster]*/
+
 	ent->client->ps.gunframe++;
 }
 
@@ -901,6 +985,8 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 	vec3_t	offset;
 	int		effect;
 	int		damage;
+	vec3_t		start;
+	vec3_t		forward, right;
 
 	ent->client->weapon_sound = gi.soundindex("weapons/hyprbl1a.wav");
 
@@ -934,9 +1020,27 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 				damage = 15;
 			else
 				damage = 20;
+
+			if(ent->client->pers.characterLevel >= 10 && ent->client->pers.upgrade_status[HYPERBLASTER] == FIRST_PATH)
+			{
+				damage*=10;
+			}
+			if(ent->client->pers.characterLevel >= 10 && ent->client->pers.upgrade_status[HYPERBLASTER] == SECOND_PATH)
+			{
+				Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);//bl233[29]
+			}
+
 			Blaster_Fire (ent, offset, damage, true, effect);
 			if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 				ent->client->pers.inventory[ent->client->ammo_index]--;
+			if(ent->client->pers.characterLevel >= 10 && ent->client->pers.upgrade_status[HYPERBLASTER] == THIRD_PATH)
+			{
+				ent->client->pers.inventory[ent->client->ammo_index]++;
+				if(ent->client->pers.inventory[ent->client->ammo_index] > 200)
+				{
+					ent->client->pers.inventory[ent->client->ammo_index] = 200;
+				}
+			}
 
 			ent->client->anim_priority = ANIM_ATTACK;
 			if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
@@ -1201,6 +1305,19 @@ void Chaingun_Fire (edict_t *ent)
 		VectorSet(offset, 0, r, u + ent->viewheight-8);
 		P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 
+		if(ent -> client -> pers.characterLevel >= 6 && ent -> client -> pers.upgrade_status[CHAINGUN] == FIRST_PATH)
+		{
+			damage *= 10;
+		}
+		if(ent -> client -> pers.characterLevel >= 6 && ent -> client -> pers.upgrade_status[CHAINGUN] == SECOND_PATH)
+		{
+			fire_bfg (ent, start, forward, damage, 400, 1000);
+		}
+		if(ent -> client -> pers.characterLevel >= 6 && ent -> client -> pers.upgrade_status[CHAINGUN] == THIRD_PATH)
+		{
+			damage /= 2;
+		}
+
 		fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
 	}
 
@@ -1214,6 +1331,14 @@ void Chaingun_Fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= shots;
+	if (ent -> client -> pers.characterLevel >= 6 && ent -> client -> pers.upgrade_status[CHAINGUN] == THIRD_PATH)
+	{
+		ent -> client -> pers.inventory[ent -> client -> ammo_index]+= shots;
+		if(ent -> client -> pers.inventory[ent -> client -> ammo_index] > 200)
+		{
+			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 200;
+		}
+	}
 }
 
 
@@ -1265,15 +1390,13 @@ void weapon_shotgun_fire (edict_t *ent)
 	//bl233[23]
 	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
 	{
-		gi.bprintf(PRINT_HIGH, "is this even being read?");
 		damage *= 10;
 		kick *= 10;
 		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	}
 	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
 	{
-		fire_shotgun (ent, start, forward, damage, kick, 1000, 1000, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-		gi.centerprintf(ent, "damage is %i", damage);
+		fire_shotgun (ent, start, forward, damage, kick, 1500, 1500, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
 		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	}
 	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
@@ -1300,9 +1423,9 @@ void weapon_shotgun_fire (edict_t *ent)
 	if (ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
 	{
 		ent -> client -> pers.inventory[ent -> client -> ammo_index]++;
-		if(ent -> client -> pers.inventory[ent -> client -> ammo_index] > 30)
+		if(ent -> client -> pers.inventory[ent -> client -> ammo_index] > 100)
 		{
-			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 30;
+			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 100;
 		}
 	}
 }
@@ -1347,19 +1470,19 @@ void weapon_supershotgun_fire (edict_t *ent)
 	fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
 	
 	//bl233[23] - gave the same weapon grants as the normal shotgun, just with better specs
-	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == FIRST_PATH)
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == FIRST_PATH)
 	{
 		damage *= 10;
 		kick *= 10;
 		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	}
-	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == SECOND_PATH)
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == SECOND_PATH)
 	{
 		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
 		gi.centerprintf(ent, "damage is %i", damage);
 		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	}
-	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == THIRD_PATH)
 	{
 		damage/=2;
 	}
@@ -1378,14 +1501,14 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= 2;
-	if (ent -> client -> pers.characterLevel >= 4 && ent -> client -> pers.upgrade_status[SHOTGUN] == THIRD_PATH)
+	if (ent -> client -> pers.characterLevel >= 4 && ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == THIRD_PATH)
 	{
 		//my attempt at making infinite ammo
-		ent -> client -> pers.inventory[ent -> client -> ammo_index]++;
-		if( ent -> client -> pers.inventory[ent -> client -> ammo_index] > 30)
+		ent -> client -> pers.inventory[ent -> client -> ammo_index]+=2;
+		if( ent -> client -> pers.inventory[ent -> client -> ammo_index] > 100)
 		{
 			//setting a maximum to the ammo count
-			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 30;
+			ent -> client -> pers.inventory[ent -> client -> ammo_index] = 100;
 		}
 	}
 }
@@ -1440,6 +1563,22 @@ void weapon_railgun_fire (edict_t *ent)
 
 	VectorSet(offset, 0, 7,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+	
+	if(ent -> client -> pers.characterLevel >= 7 && ent -> client -> pers.upgrade_status[RAILGUN] == FIRST_PATH)
+	{
+		damage *= 20;
+	}
+	if(ent -> client -> pers.characterLevel >= 7 && ent -> client -> pers.upgrade_status[RAILGUN] == SECOND_PATH)
+	{
+		fire_rail (ent, start, forward, damage, kick);
+		fire_rail (ent, start, forward, damage, kick);
+		fire_rail (ent, start, forward, damage, kick);
+	}
+	if(ent -> client -> pers.characterLevel >= 7 && ent -> client -> pers.upgrade_status[RAILGUN] == THIRD_PATH)
+	{
+		damage /= 2;
+	}
+
 	fire_rail (ent, start, forward, damage, kick);
 
 	// send muzzle flash
@@ -1453,6 +1592,15 @@ void weapon_railgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+
+	if(ent -> client -> pers.characterLevel >= 7 && ent -> client -> pers.upgrade_status[RAILGUN] == THIRD_PATH)
+	{
+		ent->client->pers.inventory[ent->client->ammo_index]++;
+		if(ent->client->pers.inventory[ent->client->ammo_index] > 30)
+		{
+			ent->client->pers.inventory[ent->client->ammo_index] = 30;
+		}
+	}
 }
 
 
@@ -1521,6 +1669,24 @@ void weapon_bfg_fire (edict_t *ent)
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+
+	if(ent->client->pers.characterLevel >= 11 && ent->client->pers.upgrade_status[BFG] == FIRST_PATH)
+	{
+		damage *= 100;
+	}
+	//bl233[30]
+	if(ent->client->pers.characterLevel >= 11 && ent->client->pers.upgrade_status[BFG] == SECOND_PATH)
+	{
+		fire_blaster(ent, start, forward, damage, 1000, EF_HYPERBLASTER, false);
+		fire_blaster(ent, start, forward, damage, 1000, EF_HYPERBLASTER, false);
+		fire_bfg (ent, start, forward, damage, 400, damage_radius);
+		fire_rail (ent, start, forward, damage, 250);
+		fire_rail (ent, start, forward, damage, 250);
+		fire_grenade (ent, start, forward, damage, 600, 2.5, damage/2);
+		fire_grenade (ent, start, forward, damage, 600, 2.5, damage/2);
+		fire_rocket (ent, start, forward, damage, 650, 120, 120);
+	}
+
 	fire_bfg (ent, start, forward, damage, 400, damage_radius);
 
 	ent->client->ps.gunframe++;
@@ -1529,6 +1695,19 @@ void weapon_bfg_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= 50;
+
+	if(ent->client->pers.characterLevel >= 11 && ent->client->pers.upgrade_status[BFG] == SECOND_PATH)
+	{
+		ent->client->pers.inventory[ent->client->ammo_index] -= 100;
+	}
+	if(ent->client->pers.characterLevel >= 11 && ent->client->pers.upgrade_status[BFG] == THIRD_PATH)
+	{
+		ent->client->pers.inventory[ent->client->ammo_index]++;
+		if(ent->client->pers.inventory[ent->client->ammo_index] > 200)
+		{
+			ent->client->pers.inventory[ent->client->ammo_index] = 200;
+		}
+	}
 }
 
 void Weapon_BFG (edict_t *ent)
