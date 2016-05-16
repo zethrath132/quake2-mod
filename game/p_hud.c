@@ -407,7 +407,7 @@ void set_upgrade_message(edict_t *ent)
 	}
 	if(ent -> client -> pers.upgrade_status[HYPERBLASTER] == SECOND_PATH)
 	{
-		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_hyperblaster), "Hyper Rail");
+		Com_sprintf (game.what_upgrade_hyperblaster, sizeof(game.what_upgrade_hyperblaster), "Hyper Normal Blaster?");
 	}
 	if(ent -> client -> pers.upgrade_status[HYPERBLASTER] == THIRD_PATH)
 	{

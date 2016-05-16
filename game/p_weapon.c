@@ -843,8 +843,8 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	}
 	if(ent->client->pers.characterLevel >= 8 && ent->client->pers.upgrade_status[ROCKETLAUNCHER] == THIRD_PATH)
 	{
-		damage_radius = damage_radius - (damage_radius*.8);
-		radius_damage = radius_damage;
+		damage_radius = damage_radius - (damage_radius*.2);
+		radius_damage = radius_damage - (radius_damage*.2);
 		damage*2;
 	}
 
@@ -1479,7 +1479,6 @@ void weapon_supershotgun_fire (edict_t *ent)
 	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == SECOND_PATH)
 	{
 		fire_shotgun (ent, start, forward, damage, kick, BENS_SHOTGUN_HSPREAD_MODIFIER, BENS_SHOTGUN_VSPREAD_MODIFIER, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-		gi.centerprintf(ent, "damage is %i", damage);
 		//ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	}
 	if(ent -> client -> pers.characterLevel >= 2 && ent -> client -> pers.upgrade_status[SUPERSHOTGUN] == THIRD_PATH)
