@@ -517,7 +517,13 @@ void monster_death_use (edict_t *self)
 	if(self -> enemy -> client != NULL)
 	{
 		//self->mass refers to the monster's own mass.
-		self->enemy->client->pers.experiencePoints += self->mass/25; 
+		//self->enemy->client->pers.experiencePoints += self->mass/25; 
+		self->enemy->client->pers.experiencePoints += 110;
+		//bl233[36] - caps off exp gained
+		if(self->enemy->client->pers.experiencePoints > 110)
+		{
+			self->enemy->client->pers.experiencePoints = 110;
+		}
 		//bl233[13] - makes all enemies give exp on death except for flyers
 		gi.bprintf(PRINT_HIGH,"%i exp gained \n", self -> enemy -> client -> pers.experiencePoints);//bl233[6] - prints a messsage on kill
 		if(self -> enemy -> client -> pers.experiencePoints >= 10)

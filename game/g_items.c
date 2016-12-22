@@ -207,13 +207,18 @@ qboolean Pickup_Adrenaline (edict_t *ent, edict_t *other)
 
 	return true;
 }
-
+//bl233[35] - infinite ammo
 qboolean Pickup_Steroids (edict_t *ent, edict_t *other)
 {
 	ent -> client -> pers.max_health += 100;
+	if(ent -> client -> pers.max_bullets--)
+	{
+		ent -> client -> pers.max_bullets++;
+	}
 	return true;
 }
 
+//bl233[36] - infinite health
 qboolean Pickup_God_Armor(edict_t *ent, edict_t *other)//bl233[God Armor]
 {
 	if(ent->client->damage_blood > 1)
@@ -224,6 +229,7 @@ qboolean Pickup_God_Armor(edict_t *ent, edict_t *other)//bl233[God Armor]
 	return true;
 }
 
+//bl233[37] - deals reflective damage
 qboolean Pickup_Thorn_Mail(edict_t *ent, edict_t *other)
 {
 	if(ent->client->damage_blood)
@@ -248,14 +254,15 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 	gitem_t	*item;
 	int		index;
 
-	if (other->client->pers.max_bullets < 250)
-		other->client->pers.max_bullets = 250;
-	if (other->client->pers.max_shells < 150)
-		other->client->pers.max_shells = 150;
-	if (other->client->pers.max_cells < 250)
-		other->client->pers.max_cells = 250;
-	if (other->client->pers.max_slugs < 75)
-		other->client->pers.max_slugs = 75;
+	//bl233[34] - doubles maximum bullets
+	if (other->client->pers.max_bullets < 500)
+		other->client->pers.max_bullets = 500;
+	if (other->client->pers.max_shells < 300)
+		other->client->pers.max_shells = 300;
+	if (other->client->pers.max_cells < 300)
+		other->client->pers.max_cells = 300;
+	if (other->client->pers.max_slugs < 150)
+		other->client->pers.max_slugs = 150;
 
 	item = FindItem("Bullets");
 	if (item)
